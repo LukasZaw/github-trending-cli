@@ -1,27 +1,28 @@
 package com.lukasz.trending;
 
+import com.lukasz.trending.cli.CliArgs;
 import com.lukasz.trending.client.ApiClient;
 import com.lukasz.trending.model.Repository;
+import com.lukasz.trending.service.FormaterService;
 import com.lukasz.trending.service.RepoService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        ApiClient api = new ApiClient();
+        CliArgs cliArgs = CliArgs.parse(args);
 
-        String json = api.getRepos();
+        try {
+            RepoService service = new RepoService(new ApiClient());
 
-        RepoService ser = new RepoService();
+            List<Repository> repos = service.getTrending(cliArgs.duration(), cliArgs.limit());
 
-        List<Repository> repos = ser.parseRepos(json);
-
-        System.out.println(repos.get(0).name);
-
-        Repository repo = new Repository();
-
-        System.out.println("Hello World!");
+            FormaterService.print(repos, cliArgs.duration(), cliArgs.limit());
+        }
+        catch (Exception e){
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
     }
 }
