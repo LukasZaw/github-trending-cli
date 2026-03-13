@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.*;
 
 public class RepoService {
-    public List<Repository> parseRepos(String json) throws Exception{
+    public List<Repository> parseRepos(String json) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(json);
 
@@ -15,7 +15,7 @@ public class RepoService {
 
         List<Repository> repos = new ArrayList<>();
 
-        for(JsonNode node : items) {
+        for (JsonNode node : items) {
             Repository repo = mapper.treeToValue(node, Repository.class);
             repos.add(repo);
         }
