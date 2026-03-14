@@ -4,11 +4,10 @@ import com.lukasz.trending.client.ApiClient;
 import com.lukasz.trending.model.DurationRange;
 import com.lukasz.trending.model.Repository;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import com.fasterxml.jackson.databind.*;
 
 public class RepoService {
     private final ApiClient client;
@@ -17,7 +16,7 @@ public class RepoService {
         this.client = client;
     }
 
-    public List<Repository> getTrending(DurationRange range, int limit) throws Exception {
+    public List<Repository> getTrending(DurationRange range, int limit) throws IOException, InterruptedException {
         String since = range.sinceDate(LocalDate.now()).toString();
         List<Repository> repos = client.searchTrending(since, limit);
         repos.sort(Comparator.comparingInt(Repository::stars).reversed());

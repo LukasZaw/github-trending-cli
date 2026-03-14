@@ -10,13 +10,13 @@ import java.net.URLEncoder;
 import java.net.http.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ApiClient {
 
     private static final String API_URL = "https://api.github.com/search/repositories";
+    private static final String API_VERSION = "2022-11-28";
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .build();
@@ -30,17 +30,25 @@ public class ApiClient {
                 + "?q=" + URLEncoder.encode(q, StandardCharsets.UTF_8)
                 + "&sort=stars&order=desc&per_page=" + limit;
 
-        HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .timeout(Duration.ofSeconds(20))
                 .header("Accept", "application/vnd.github+json")
-                .header("X-GitHub-Api-Version", "2026-03-10")
-                .GET()
-                .build();
+                .header("X-GitHub-Api-Version", API_VERSION);
+
+        String token = System.getenv("GITHUB_TOKEN");
+        if (token != null && !token.isBlank()) {
+            requestBuilder.header("Authorization", "Bearer " + token.trim());
+        }
+
+        HttpRequest request = requestBuilder.GET().build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
+        if (response.statusCode() == 401) {
+            throw new RuntimeException("GitHub API unauthorized (HTTP 401). Check GITHUB_TOKEN.");
+        }
         if (response.statusCode() == 403) {
-            throw new RuntimeException("GitHub API rate limit exceeded (HTTP 403).");
+            throw new RuntimeException("GitHub API rate limit exceeded (HTTP 403). Set GITHUB_TOKEN to increase the limit.");
         }
         if (response.statusCode() != 200) {
             throw new RuntimeException("GitHub API error: HTTP " + response.statusCode() + " -> " + response.body());

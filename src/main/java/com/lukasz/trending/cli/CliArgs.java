@@ -3,25 +3,54 @@ package com.lukasz.trending.cli;
 import com.lukasz.trending.model.DurationRange;
 
 public record CliArgs (DurationRange duration, int limit) {
+    public static final DurationRange DEFAULT_DURATION = DurationRange.WEEK;
+    public static final int DEFAULT_LIMIT = 10;
+
     public static CliArgs parse(String[] args) {
-        DurationRange duration = DurationRange.WEEK;
-        int limit = 10;
+        DurationRange duration = DEFAULT_DURATION;
+        int limit = DEFAULT_LIMIT;
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "--duration" -> {
-                    if (i + 1 >= args.length) throw new IllegalArgumentException("No value for --duration");
+                    if (i + 1 >= args.length) throw new IllegalArgumentException("Missing value for --duration.");
                     duration = DurationRange.from(args[++i]);
                 }
                 case "--limit" -> {
-                    if (i + 1 >= args.length) throw new IllegalArgumentException("Brak wartości dla --limit");
-                    limit = Integer.parseInt(args[++i]);
-                    if (limit <= 0) throw new IllegalArgumentException("--limit musi być > 0");
+                    if (i + 1 >= args.length) throw new IllegalArgumentException("Missing value for --limit.");
+                    try {
+                        limit = Integer.parseInt(args[++i]);
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("--limit must be an integer.");
+                    }
+                    if (limit <= 0) throw new IllegalArgumentException("--limit must be > 0");
                 }
-                default -> throw new IllegalArgumentException("Unknown Argument: " + args[i]);
+                case "--help", "-h" -> {
+                    // Main decides whether to print help and what exit code to use.
+                }
+                default -> throw new IllegalArgumentException("Unknown argument: " + args[i]);
             }
         }
 
         return new CliArgs(duration, limit);
+    }
+
+    public static boolean isHelpRequested(String[] args) {
+        for (String arg : args) {
+            if ("--help".equals(arg) || "-h".equals(arg)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void printUsage() {
+        System.out.println("Usage:");
+        System.out.println("  java -jar target/github-trending-cli-1.0-SNAPSHOT.jar [--duration day|week|month|year] [--limit N]");
+        System.out.println();
+        System.out.println("Options:");
+        System.out.println("  --duration   Time range filter (default: " + DEFAULT_DURATION.name().toLowerCase() + ")");
+        System.out.println("  --limit      Number of repositories to fetch (default: " + DEFAULT_LIMIT + ")");
+        System.out.println("  --help, -h   Show this help");
     }
 }

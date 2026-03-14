@@ -1,19 +1,16 @@
 package com.lukasz.trending;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import com.lukasz.trending.cli.CliArgs;
 import org.junit.jupiter.api.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    /**
-     * Rigorous Test :-)
-     */
+public class AppTest {
     @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue(true);
+    public void shouldDetectHelpFlag() {
+        assertTrue(CliArgs.isHelpRequested(new String[]{"--help"}));
+        assertTrue(CliArgs.isHelpRequested(new String[]{"-h"}));
+        assertFalse(CliArgs.isHelpRequested(new String[]{"--duration", "week"}));
     }
 }

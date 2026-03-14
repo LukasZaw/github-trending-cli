@@ -6,12 +6,16 @@ public enum DurationRange{
     DAY, WEEK, MONTH, YEAR;
 
     public static DurationRange from(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("--duration requires a value: day|week|month|year");
+        }
+
         return switch (value.toLowerCase()) {
             case "day" -> DAY;
             case "week" -> WEEK;
             case "month" -> MONTH;
             case "year" -> YEAR;
-            default -> throw new IllegalArgumentException("Niepoprawny duration: " + value);
+            default -> throw new IllegalArgumentException("Invalid --duration: " + value + ". Allowed values: day|week|month|year");
         };
     }
 

@@ -11,7 +11,7 @@ public class FormaterService {
                 duration.name().toLowerCase(), limit);
 
         if (repos.isEmpty()) {
-            System.out.println("Brak wyników.");
+            System.out.println("No results.");
             return;
         }
 
