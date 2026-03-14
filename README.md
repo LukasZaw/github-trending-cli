@@ -2,6 +2,7 @@
 
 Java CLI for fetching and displaying trending repositories from the GitHub API.
 
+https://roadmap.sh/projects/github-trending-cli
 ## Features
 
 - time-range filtering: `day`, `week`, `month`, `year`
