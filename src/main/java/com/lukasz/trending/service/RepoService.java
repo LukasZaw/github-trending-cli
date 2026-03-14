@@ -16,9 +16,9 @@ public class RepoService {
         this.client = client;
     }
 
-    public List<Repository> getTrending(DurationRange range, int limit) throws IOException, InterruptedException {
+    public List<Repository> getTrending(DurationRange range, int limit, String language) throws IOException, InterruptedException {
         String since = range.sinceDate(LocalDate.now()).toString();
-        List<Repository> repos = client.searchTrending(since, limit);
+        List<Repository> repos = client.searchTrending(since, limit, language);
         repos.sort(Comparator.comparingInt(Repository::stars).reversed());
         return repos;
     }

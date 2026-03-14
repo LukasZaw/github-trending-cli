@@ -6,9 +6,10 @@ import com.lukasz.trending.model.Repository;
 import java.util.List;
 
 public class FormaterService {
-    public static void print(List<Repository> repos, DurationRange duration, int limit) {
-        System.out.printf("Trending repositories (duration=%s, limit=%d)%n%n",
-                duration.name().toLowerCase(), limit);
+    public static void print(List<Repository> repos, DurationRange duration, int limit, String language) {
+        String languageLabel = (language == null || language.isBlank()) ? "any" : language.trim();
+        System.out.printf("Trending repositories (duration=%s, limit=%d, language=%s)%n%n",
+                duration.name().toLowerCase(), limit, languageLabel);
 
         if (repos.isEmpty()) {
             System.out.println("No results.");

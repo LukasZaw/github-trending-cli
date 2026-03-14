@@ -24,8 +24,11 @@ public class ApiClient {
 
 
 
-    public List<Repository> searchTrending(String createdSince, int limit) throws IOException, InterruptedException {
+    public List<Repository> searchTrending(String createdSince, int limit, String language) throws IOException, InterruptedException {
         String q = "created:>=" + createdSince;
+        if (language != null && !language.isBlank()) {
+            q += " language:" + language.trim();
+        }
         String url = API_URL
                 + "?q=" + URLEncoder.encode(q, StandardCharsets.UTF_8)
                 + "&sort=stars&order=desc&per_page=" + limit;

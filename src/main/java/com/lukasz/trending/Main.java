@@ -19,9 +19,9 @@ public class Main {
             CliArgs cliArgs = CliArgs.parse(args);
             RepoService service = new RepoService(new ApiClient());
 
-            List<Repository> repos = service.getTrending(cliArgs.duration(), cliArgs.limit());
+            List<Repository> repos = service.getTrending(cliArgs.duration(), cliArgs.limit(), cliArgs.language());
 
-            FormaterService.print(repos, cliArgs.duration(), cliArgs.limit());
+            FormaterService.print(repos, cliArgs.duration(), cliArgs.limit(), cliArgs.language());
         } catch (IllegalArgumentException e) {
             System.err.println("Argument error: " + e.getMessage());
             CliArgs.printUsage();

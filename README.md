@@ -7,6 +7,7 @@ https://roadmap.sh/projects/github-trending-cli
 
 - time-range filtering: `day`, `week`, `month`, `year`
 - configurable result limit (`--limit`)
+- programming language filter (`--language` or `-l`)
 - readable terminal output
 - built-in `--help` / `-h`
 
@@ -31,6 +32,13 @@ After the build, an executable fat JAR is created:
 java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration week --limit 10
 ```
 
+You can also filter by language:
+
+```bash
+java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration week --language python --limit 10
+java -jar target/github-trending-cli-1.0-SNAPSHOT.jar -l java --limit 10
+```
+
 ## Help
 
 ```bash
@@ -43,6 +51,8 @@ java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --help
 java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration day --limit 5
 java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration month --limit 20
 java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration year --limit 10
+java -jar target/github-trending-cli-1.0-SNAPSHOT.jar --duration week --language python --limit 10
+java -jar target/github-trending-cli-1.0-SNAPSHOT.jar -l java --limit 10
 ```
 
 ## GitHub API rate limit
